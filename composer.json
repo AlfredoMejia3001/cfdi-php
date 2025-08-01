@@ -1,0 +1,24 @@
+{
+    "name": "alfredomejia3001/cfdi-php",
+    "description": "Generador de XML para CFDI 4.0 compatible con el SAT",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alfredo Mejia",
+            "email": "mejia_alfred0@outlook.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-dom": "*",
+        "ext-openssl": "*",
+        "ext-xsl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlfredoMejia3001\\CFDI\\": "src/"
+                }
+    },
+    "minimum-stability": "dev"
+}
