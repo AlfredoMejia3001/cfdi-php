@@ -27,7 +27,7 @@ cfdi-php/
 
 1. **Clonar el repositorio:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/AlfredoMejia3001/cfdi-php.git  
 cd cfdi-php-sdk/cfdi-php
 ```
 
