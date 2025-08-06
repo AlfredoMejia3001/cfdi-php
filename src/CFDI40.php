@@ -398,44 +398,24 @@ class CFDI40
         $RFC = $this->cEmisor->Rfc;
 
         // Validar credenciales primero usando el servicio de Utilities
-        $this->logDebug('=== INICIO DE VALIDACIÓN DE CREDENCIALES ===');
-        $this->logDebug('Validando credenciales con Finkok Utilities');
-        
         $authResponse = $this->validateFinkokCredentials($FinkokUser, $FinkokPass);
-        $this->logDebug('Respuesta de validación de credenciales:', $authResponse);
         
         // Verificar si la autenticación fue exitosa
         if ($authResponse['valid'] !== true) {
             $errorMessage = isset($authResponse['message']) 
                 ? 'Error de autenticación: ' . trim($authResponse['message']) . PHP_EOL
                 : 'Error desconocido al validar las credenciales' . PHP_EOL;
-                
-            $this->logDebug('Validación fallida', [
-                'error' => $errorMessage,
-                'response' => $authResponse
-            ]);
             
             $Errores = $errorMessage;
             return false;
         }
         
-        $this->logDebug('=== VALIDACIÓN DE RFC ===');
-        $this->logDebug('Iniciando validación del RFC con Finkok', ['rfc' => $RFC]);
-        
         // Validar el RFC contra el servicio de Finkok
         $rfcValidation = $this->GetMethod($FinkokUser, $FinkokPass, $RFC);
-        $this->logDebug('Respuesta de validación de RFC:', $rfcValidation);
         
         // Verificar si la validación del RFC fue exitosa
         if (!isset($rfcValidation['success']) || $rfcValidation['success'] !== true) {
             $errorMessage = $rfcValidation['message'] ?? 'Error desconocido al validar el RFC';
-            $errorDetails = [
-                'error_message' => $errorMessage,
-                'response' => $rfcValidation,
-                'rfc' => $RFC
-            ];
-            
-            $this->logDebug('Error en validación de RFC', $errorDetails);
             $Errores = $errorMessage;
             return false;
         }
@@ -447,11 +427,6 @@ class CFDI40
             // Si el RFC está inactivo
             if ($status === 'I') {
                 $errorMsg = 'Error: El RFC emisor se encuentra inactivo en la cuenta';
-                $this->logDebug('RFC inactivo', [
-                    'rfc' => $RFC,
-                    'status' => $status,
-                    'response' => $rfcValidation
-                ]);
                 $Errores = $errorMsg;
                 return false;
             }
@@ -459,26 +434,15 @@ class CFDI40
             // Si el RFC no está activo (A)
             if ($status !== 'A') {
                 $errorMsg = 'Error: El estado del RFC no es válido (Estado: ' . $status . ')';
-                $this->logDebug('Estado de RFC no válido', [
-                    'rfc' => $RFC,
-                    'status' => $status,
-                    'response' => $rfcValidation
-                ]);
                 $Errores = $errorMsg;
                 return false;
             }
         } else {
             // Si no se pudo determinar el estado del RFC
             $errorMsg = 'Error: No se pudo determinar el estado del RFC';
-            $this->logDebug('Estado de RFC no disponible', [
-                'rfc' => $RFC,
-                'response' => $rfcValidation
-            ]);
             $Errores = $errorMsg;
             return false;
         }
-        
-        $this->logDebug('=== VALIDACIONES COMPLETADAS CON ÉXITO ===');
         
         // Si todo está bien, procedemos a crear el XML
         $c = $this->CrearXML();
@@ -817,17 +781,9 @@ class CFDI40
 
     private function GetMethod($username, $password, $taxpayer_id)
     {
-        $this->logDebug('=== GET METHOD - INICIO ===');
-        $this->logDebug('Validando RFC con servicio de registro', [
-            'username' => $username,
-            'rfc' => $taxpayer_id,
-            'password_length' => strlen($password)
-        ]);
-
         try {
             // URL del servicio de registro de Finkok
             $url = "https://demo-facturacion.finkok.com/servicios/soap/registration.wsdl";
-            $this->logDebug('Conectando al servicio de registro', ['url' => $url]);
 
             // Configuración del cliente SOAP
             $options = [
@@ -848,36 +804,14 @@ class CFDI40
                 'id_type' => 'on' // Para búsqueda exacta
             ];
 
-            $this->logDebug('Solicitando validación de RFC', [
-                'username' => $username,
-                'taxpayer_id' => $taxpayer_id,
-                'service' => 'registration.get'
-            ]);
-
             // Realizar la llamada al servicio
             $response = $client->__soapCall('get', [$params]);
-            
-            // Registrar respuesta completa para depuración
-            $this->logDebug('Respuesta del servicio de registro', [
-                'response' => $response
-            ]);
-
-            // Procesar la respuesta
-            $this->logDebug('Procesando respuesta del servicio de registro', [
-                'response_structure' => print_r($response, true)
-            ]);
 
             // Verificar si la respuesta tiene la estructura esperada
             if (isset($response->getResult->users->ResellerUser)) {
                 $userData = $response->getResult->users->ResellerUser;
                 $status = (string)$userData->status;
                 $taxpayerId = (string)$userData->taxpayer_id;
-                
-                $this->logDebug('Datos del RFC obtenidos', [
-                    'status' => $status,
-                    'taxpayer_id' => $taxpayerId,
-                    'credit' => $userData->credit
-                ]);
                 
                 return [
                     'success' => true,
@@ -892,10 +826,6 @@ class CFDI40
             // Si hay un error en la respuesta
             if (isset($response->getResult->message)) {
                 $errorMsg = (string)$response->getResult->message;
-                $this->logDebug('Error en la respuesta del servicio', [
-                    'message' => $errorMsg
-                ]);
-                
                 return [
                     'success' => false,
                     'message' => $errorMsg,
@@ -904,10 +834,6 @@ class CFDI40
             }
             
             // Respuesta inesperada
-            $this->logDebug('Estructura de respuesta inesperada', [
-                'raw_response' => print_r($response, true)
-            ]);
-            
             return [
                 'success' => false,
                 'message' => 'No se pudo procesar la respuesta del servicio de registro',
@@ -916,40 +842,32 @@ class CFDI40
             ];
             
         } catch (SoapFault $e) {
-            $errorDetails = [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ];
-            $this->logDebug('Error SOAP en GetMethod', $errorDetails);
-            
             return [
                 'success' => false,
                 'message' => 'Error en el servicio de registro: ' . $e->getMessage(),
                 'status' => 'error',
                 'error_type' => 'soap_fault',
-                'error_details' => $errorDetails
+                'error_details' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
             ];
             
         } catch (Exception $e) {
-            $errorDetails = [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ];
-            $this->logDebug('Error inesperado en GetMethod', $errorDetails);
-            
             return [
                 'success' => false,
                 'message' => 'Error inesperado al validar el RFC: ' . $e->getMessage(),
                 'status' => 'error',
                 'error_type' => 'unexpected_error',
-                'error_details' => $errorDetails
+                'error_details' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
             ];
-        } finally {
-            $this->logDebug('=== GET METHOD - FIN ===');
         }
     }
 
@@ -968,32 +886,14 @@ class CFDI40
            </soapenv:Envelope>';
     }
 
-    /**
-     * Valida las credenciales de Finkok usando el servicio de Utilities
-     * 
-     * @param string $username Usuario de Finkok
-     * @param string $password Contraseña de Finkok
-     * @return array Arreglo con el resultado de la validación
-     */
-    private function logDebug($message, $data = null) {
-        $logMessage = '[' . date('Y-m-d H:i:s') . '] ' . $message . "\n";
-        if ($data !== null) {
-            $logMessage .= 'Data: ' . print_r($data, true) . "\n";
-        }
-        file_put_contents('cfdi_debug.log', $logMessage, FILE_APPEND);
-    }
-
     private function validateFinkokCredentials($username, $password)
     {
-        $this->logDebug('Iniciando validación de credenciales', ['username' => $username]);
-        
         try {
             // Usamos un código postal por defecto para la validación
             $zipcode = '61970'; // Código postal genérico para validación
             
             // URL del servicio de Utilities
             $url = "https://demo-facturacion.finkok.com/servicios/soap/utilities.wsdl";
-            $this->logDebug('Configurando conexión SOAP', ['url' => $url]);
             
             // Configuración de opciones para el cliente SOAP
             $options = [
@@ -1005,39 +905,20 @@ class CFDI40
             
             // Creamos el cliente SOAP
             $client = new SoapClient($url, $options);
-            $this->logDebug('Cliente SOAP creado correctamente');
             
-            // Preparamos los parámetros (sin incluir la contraseña en los logs)
+            // Preparamos los parámetros
             $params = [
                 'username' => $username,
                 'password' => $password,
                 'zipcode' => $zipcode
             ];
             
-            $this->logDebug('Parámetros preparados', [
-                'username' => $username,
-                'password_length' => strlen($password),
-                'zipcode' => $zipcode
-            ]);
-            
             // Realizamos la llamada al servicio
-            $this->logDebug('Realizando llamada SOAP a datetime');
             $response = $client->__soapCall("datetime", [$params]);
-            
-            // Registramos la respuesta completa (sin exponer datos sensibles)
-            $responseData = [];
-            if (isset($response->datetimeResult)) {
-                $responseData = [
-                    'has_datetime' => isset($response->datetimeResult->datetime),
-                    'has_error' => isset($response->datetimeResult->error)
-                ];
-            }
-            $this->logDebug('Respuesta recibida del servicio', $responseData);
             
             // Verificamos si hay un error en la respuesta
             if (isset($response->datetimeResult->error)) {
                 $errorMessage = (string)$response->datetimeResult->error;
-                $this->logDebug('Error en la respuesta', ['error' => $errorMessage]);
                 return [
                     'success' => false,
                     'message' => $errorMessage,
@@ -1057,45 +938,34 @@ class CFDI40
                     : null
             ];
             
-            $this->logDebug('Validación exitosa', [
-                'has_datetime' => isset($response->datetimeResult->datetime),
-                'server_datetime' => $result['server_datetime']
-            ]);
-            
             return $result;
             
         } catch (SoapFault $e) {
-            $errorDetails = [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ];
-            $this->logDebug('Error SOAP', $errorDetails);
-            
             return [
                 'success' => false,
                 'message' => 'Error en el servicio de autenticación: ' . $e->getMessage(),
                 'valid' => false,
                 'error_type' => 'soap_fault',
-                'error_details' => $errorDetails
+                'error_details' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
             ];
             
         } catch (Exception $e) {
-            $errorDetails = [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ];
-            $this->logDebug('Error inesperado', $errorDetails);
-            
             return [
                 'success' => false,
                 'message' => 'Error inesperado: ' . $e->getMessage(),
                 'valid' => false,
                 'error_type' => 'unexpected_error',
-                'error_details' => $errorDetails
+                'error_details' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
             ];
         }
     }
