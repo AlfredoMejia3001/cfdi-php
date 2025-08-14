@@ -665,20 +665,18 @@ chown www-data:www-data /ruta/destino
 ## 📚 Recursos Adicionales
 
 ### Documentación del SAT
-- [CFDI 4.0](https://www.sat.gob.mx/cfd)
-- [Recepción de Pagos](https://www.sat.gob.mx/cfd/pagos)
-- [Carta Porte](https://www.sat.gob.mx/cfd/carta-porte)
+- [CFDI 4.0](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm)
+- [Recepción de Pagos](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/recepcion_de_pagos.htm)
+- [Carta Porte](http://omawww.sat.gob.mx/tramitesyservicios/paginas/complemento_carta_porte.htm)
 - [Nómina](https://www.sat.gob.mx/cfd/nomina)
 
 ### Catálogos del SAT
-- [Catálogo de Productos y Servicios](https://www.sat.gob.mx/cfd/catalogos)
-- [Catálogo de Unidades](https://www.sat.gob.mx/cfd/catalogos)
-- [Catálogo de Impuestos](https://www.sat.gob.mx/cfd/catalogos)
+- [Catálogo de Productos y Servicios](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
+- [Catálogo de Unidades](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
+- [Catálogo de Impuestos](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
 
 ### Servicios de Finkok
-- [Documentación API](https://www.finkok.com/developers/)
-- [Servicios de Validación](https://www.finkok.com/services/)
-- [Soporte Técnico](https://www.finkok.com/support/)
+- [Documentación API](https://www.finkok.com/developers/) Estan los .md como documentacion
 
 ## 🤝 Contribuciones
 
@@ -699,7 +697,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 Para soporte técnico:
 
 - **Issues**: Crear un issue en GitHub
-- **Email**: contacto@empresa.com
+- **Email**: alfredo.mejia@finkok.com
 - **Documentación**: Esta documentación y archivos README específicos
 
 ---
