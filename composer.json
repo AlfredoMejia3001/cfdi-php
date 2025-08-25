@@ -1,11 +1,28 @@
 {
     "name": "alfredomejia/cfdi-php",
-    "description": "Librería PHP para manejo de CFDI.",
+    "description": "Librería PHP escalable para manejo de CFDI con patrones de diseño modernos.",
     "type": "library",
     "license": "MIT",
+    "keywords": ["cfdi", "sat", "facturacion", "mexico", "xml", "finkok"],
     "autoload": {
         "psr-4": {
-            "AlfredoMejia\\CfdiPhp\\": "src/"
+            "AlfredoMejia\\CfdiPhp\\": "src/",
+            "AlfredoMejia\\CfdiPhp\\Builders\\": "src/Builders/",
+            "AlfredoMejia\\CfdiPhp\\Services\\": "src/Services/",
+            "AlfredoMejia\\CfdiPhp\\Contracts\\": "src/Contracts/",
+            "AlfredoMejia\\CfdiPhp\\Models\\": "src/Models/",
+            "AlfredoMejia\\CfdiPhp\\Strategies\\": "src/Strategies/",
+        "AlfredoMejia\\CfdiPhp\\Strategies\\Pagos\\": "src/Strategies/Pagos/",
+        "AlfredoMejia\\CfdiPhp\\Strategies\\CartaPorte\\": "src/Strategies/CartaPorte/",
+        "AlfredoMejia\\CfdiPhp\\Strategies\\Nomina\\": "src/Strategies/Nomina/",
+        "AlfredoMejia\\CfdiPhp\\Strategies\\ComercioExterior\\": "src/Strategies/ComercioExterior/",
+            "AlfredoMejia\\CfdiPhp\\Exceptions\\": "src/Exceptions/",
+            "AlfredoMejia\\CfdiPhp\\Legacy\\": "src/Legacy/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AlfredoMejia\\CfdiPhp\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -14,5 +31,18 @@
             "email": "alfredo.mejia@finkok.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=7.4",
+        "ext-soap": "*",
+        "ext-dom": "*",
+        "ext-libxml": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

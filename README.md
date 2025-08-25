@@ -1,38 +1,96 @@
-# CFDI PHP SDK - Documentación Completa
+# 🚀 CFDI PHP - Librería Completa para Comprobantes Fiscales Digitales
 
-SDK completo para la generación de Comprobantes Fiscales Digitales por Internet (CFDI) en PHP, incluyendo soporte para CFDI 4.0, Recepción de Pagos, Carta Porte y Nómina.
+## 📋 Descripción
 
-## 📋 Características
+**CFDI PHP** es una librería moderna y escalable para generar Comprobantes Fiscales Digitales por Internet (CFDI) en PHP. Implementa patrones de diseño avanzados para ser mantenible, extensible y fácil de usar.
+
+## ✨ Características Principales
 
 - ✅ **CFDI 4.0**: Generación de facturas electrónicas estándar
-- ✅ **Recepción de Pagos**: Complemento para pagos y abonos
-- ✅ **Carta Porte**: Complemento para transporte de mercancías
-- ✅ **Nómina 1.2**: Complemento para nóminas y recursos humanos
-- ✅ **Validación Finkok**: Integración con servicios de validación
-- ✅ **XML Válido**: Generación de XML conforme a esquemas del SAT
+- ✅ **Complemento de Pagos 2.0**: Para recibos de pago y abonos
+- ✅ **Complemento de Carta Porte 3.1**: Para transporte de mercancías
+- ✅ **Complemento de Nómina 1.2**: Para nóminas y recursos humanos
+- ✅ **Validación Finkok**: Integración con servicios de validación automática
+- ✅ **Arquitectura Moderna**: Builder Pattern, Factory Pattern, Strategy Pattern
+- ✅ **XML Válido**: Generación conforme a esquemas del SAT
 - ✅ **Manejo de Errores**: Validaciones robustas y mensajes claros
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Arquitectura de la Librería
+
+### 🔧 Patrones de Diseño Implementados
+
+1. **Builder Pattern**: Construcción fluida y expresiva de CFDIs
+2. **Factory Pattern**: Creación centralizada de diferentes tipos
+3. **Strategy Pattern**: Complementos pluggeables y extensibles
+4. **Service Layer**: Servicios especializados y reutilizables
+5. **Dependency Injection**: Flexibilidad y testing mejorado
+
+### 📁 Estructura del Proyecto
 
 ```
 cfdi-php/
 ├── src/
-│   ├── CFDI40.php              # Clase principal para CFDI 4.0
-│   ├── RecepcionPagos.php      # Clase para Recepción de Pagos
-│   ├── CartaPorte31.php        # Clase para Carta Porte 3.1
-│   └── Nomina12.php            # Clase para Nómina 1.2
-├── composer.json
-├── README.md                    # Esta documentación principal
-├── README_CartaPorte31.md      # Documentación específica de Carta Porte
-└── README_Nomina12.md          # Documentación específica de Nómina
+│   ├── CFDIFactory.php              # 🎯 Punto de entrada principal
+│   ├── Builders/                    # 🔧 Constructores fluidos
+│   │   ├── AbstractCFDIBuilder.php
+│   │   ├── CFDI40Builder.php
+│   │   ├── PagosBuilder.php
+│   │   ├── CartaPorteBuilder.php
+│   │   └── NominaBuilder.php
+│   ├── Services/                    # 🛠️ Servicios especializados
+│   │   ├── FinkokService.php
+│   │   ├── ValidationService.php
+│   │   ├── XMLGeneratorService.php
+│   │   └── FileService.php
+│   ├── Models/                      # 📋 Modelos de datos
+│   │   ├── CFDIData.php
+│   │   ├── Comprobante.php
+│   │   ├── Emisor.php
+│   │   └── Receptor.php
+│   ├── Contracts/                   # 📜 Interfaces
+│   │   ├── CFDIBuilderInterface.php
+│   │   ├── ValidationServiceInterface.php
+│   │   └── ComplementStrategyInterface.php
+│   ├── Strategies/                  # 🔌 Complementos pluggeables
+│   │   ├── Pagos/
+│   │   ├── CartaPorte/
+│   │   ├── Nomina/
+│   │   └── ComercioExterior/
+│   ├── Exceptions/                  # ⚠️ Excepciones personalizadas
+│   │   ├── CFDIException.php
+│   │   └── ValidationException.php
+│   └── Legacy/                      # 🔄 Clases originales (compatibilidad)
+│       ├── CFDI40.php
+│       ├── CartaPorte31.php
+│       ├── Nomina12.php
+│       └── RecepcionPagos.php
+├── examples/                        # 📚 Ejemplos de uso
+│   ├── ejemplo_cfdi_basico.php
+│   ├── ejemplo_pagos.php
+│   ├── ejemplo_cartaporte.php
+│   ├── ejemplo_nomina.php
+│   └── README.md
+├── composer.json                    # 📦 Dependencias
+└── README.md                        # 📖 Esta documentación
 ```
 
 ## 🚀 Instalación
 
+### Requisitos Previos
+
+- **PHP 7.4 o superior**
+- **Composer** instalado
+- **Extensiones PHP**:
+  - `ext-soap` (para comunicación con Finkok)
+  - `ext-dom` (para generación de XML)
+  - `ext-libxml` (para manipulación de XML)
+
+### Instalación
+
 1. **Clonar el repositorio:**
 ```bash
-git clone https://github.com/AlfredoMejia3001/cfdi-php.git  
-cd cfdi-php-sdk/cfdi-php
+git clone https://github.com/AlfredoMejia/cfdi-php.git
+cd cfdi-php
 ```
 
 2. **Instalar dependencias:**
@@ -40,29 +98,16 @@ cd cfdi-php-sdk/cfdi-php
 composer install
 ```
 
-3. **Verificar extensiones PHP requeridas:**
+3. **Verificar extensiones:**
 ```bash
 php -m | grep -E "(soap|dom)"
 ```
 
-## 📚 Clases Disponibles
-
-### 1. CFDI40.php - Facturación Estándar
-Genera CFDI 4.0 básicos sin complementos específicos.
-
-### 2. RecepcionPagos.php - Recepción de Pagos
-Genera CFDI con complemento de Recepción de Pagos para abonos y pagos.
-
-### 3. CartaPorte31.php - Carta Porte 3.1
-Genera CFDI con complemento de Carta Porte para transporte de mercancías.
-
-### 4. Nomina12.php - Nómina 1.2
-Genera CFDI con complemento de Nómina para recursos humanos.
-
-## 🔧 Configuración Inicial
+## 🔧 Configuración
 
 ### Credenciales de Finkok
-Para usar las validaciones, necesitas una cuenta en Finkok:
+
+Para usar las validaciones automáticas, necesitas una cuenta en Finkok:
 
 ```php
 $finkokUser = "tu_usuario@finkok.com.mx";
@@ -70,6 +115,7 @@ $finkokPass = "tu_password";
 ```
 
 ### Configuración del Entorno
+
 ```php
 // Habilitar reporte de errores
 error_reporting(E_ALL);
@@ -79,445 +125,456 @@ ini_set('display_errors', 1);
 date_default_timezone_set('America/Mexico_City');
 ```
 
-## 📖 Guías de Uso por Clase
+## 📖 Guía de Uso
 
-### 1. CFDI40.php - Facturación Básica
+### 🎯 Punto de Entrada Principal
+
+La librería se usa a través de `CFDIFactory`, que es el punto de entrada principal:
+
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use AlfredoMejia\CfdiPhp\CFDIFactory;
+
+$factory = new CFDIFactory();
+```
+
+### 🧾 1. CFDI Básico 4.0
 
 #### Uso Básico
 ```php
-<?php
-require_once 'src/CFDI40.php';
-
-$cfdi = new CFDI40();
-
-// Configurar CFDI principal
-$cfdi->CFDI40(
-    '30001000000500003416',  // NoCertificado
-    'A',                     // Serie
-    '12345',                 // Folio
-    '2024-01-15T10:30:00',  // Fecha
-    '1000.00',              // SubTotal
-    'MXN',                  // Moneda
-    '1160.00',              // Total
-    'I',                    // TipoDeComprobante
-    '01',                   // Exportacion
-    'PUE',                  // MetodoPago
-    '01',                   // FormaPago
-    '06500'                 // LugarExpedicion
-);
-
-// Agregar emisor
-$cfdi->AgregarEmisor(
-    'XAXX010101000',        // RFC
-    'EMPRESA DEMO SA DE CV', // Nombre
-    '601'                   // RegimenFiscal
-);
-
-// Agregar receptor
-$cfdi->AgregarReceptor(
-    'XEXX010101000',        // RFC
-    'CLIENTE DEMO SA DE CV', // Nombre
-    '601',                  // RegimenFiscalReceptor
-    'G01',                  // UsoCFDI
-    '06500'                 // DomicilioFiscalReceptor
-);
-
-// Agregar concepto
-$cfdi->AgregarConcepto(
-    '84111506',             // ClaveProdServ
-    'PROD001',              // NoIdentificacion
-    '1.00',                 // Cantidad
-    'H87',                  // ClaveUnidad
-    'Pieza',                // Unidad
-    'Servicio de consultoría', // Descripcion
-    '1000.00',              // ValorUnitario
-    '1000.00',              // Importe
-    '02'                    // ObjetoImp
-);
-
-// Agregar impuestos
-$cfdi->AgregarImpuestosTotales(
-    '0.00',                 // TotalImpuestosRetenidos
-    '160.00'                // TotalImpuestosTrasladados
-);
-
-$cfdi->AgregarTrasladoTotal(
-    '1000.00',              // Base
-    '160.00',               // Importe
-    '002',                  // Impuesto (IVA)
-    '0.160000',             // TasaOCuota
-    'Tasa'                  // TipoFactor
-);
-
-// Generar XML
-$errores = "";
-$resultado = $cfdi->CrearCFDIXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,
-    "./",
-    "FACTURA_EJEMPLO"
-);
-
-if ($resultado === true) {
-    echo "✅ CFDI generado exitosamente";
-} else {
-    echo "❌ Error: " . $errores;
-}
+$cfdi = $factory->createCFDI40Builder()
+    ->comprobante(
+        noCertificado: '30001000000500003416',
+        serie: 'A',
+        folio: '12345',
+        fecha: '2024-01-15T10:30:00',
+        subTotal: '1000.00',
+        total: '1160.00',
+        lugarExpedicion: '06500'
+    )
+    ->emisor(
+        rfc: 'XAXX010101000',
+        nombre: 'EMPRESA DEMO SA DE CV',
+        regimenFiscal: '601'
+    )
+    ->receptor(
+        rfc: 'XEXX010101000',
+        nombre: 'CLIENTE DEMO SA DE CV',
+        regimenFiscalReceptor: '601',
+        usoCFDI: 'G01',
+        domicilioFiscalReceptor: '06500'
+    )
+    ->concepto(
+        claveProdServ: '84111506',
+        cantidad: '1.00',
+        claveUnidad: 'H87',
+        descripcion: 'Servicio de consultoría',
+        valorUnitario: '1000.00',
+        importe: '1000.00',
+        objetoImp: '02'
+    )
+    ->impuestosTotales()
+    ->trasladoTotal(
+        base: '1000.00',
+        impuesto: '002',
+        tipoFactor: 'Tasa',
+        tasaOCuota: '0.160000',
+        importe: '160.00'
+    )
+    ->build();
 ```
 
-#### Tipos de Comprobante
-- `I`: Ingreso
-- `E`: Egreso
-- `T`: Traslado
-- `N`: Nómina
-- `P`: Pago
-
-#### Métodos de Pago
-- `PUE`: Pago en una sola exhibición
-- `PPD`: Pago en parcialidades o diferido
-
-#### Formas de Pago
-- `01`: Efectivo
-- `02`: Cheque nominativo
-- `03`: Transferencia electrónica
-- `04`: Tarjeta de crédito
-- `28`: Tarjeta de débito
-- `99`: Por definir
-
-### 2. RecepcionPagos.php - Recepción de Pagos
-
-#### Uso Básico
+#### Procesamiento Completo
 ```php
-<?php
-require_once 'src/RecepcionPagos.php';
-
-$recepcion = new RecepcionPagos();
-
-// Configurar CFDI principal
-$recepcion->CFDI40(
-    '30001000000500003416',  // NoCertificado
-    'PAG',                   // Serie
-    '001',                   // Folio
-    '2024-01-15T10:30:00',  // Fecha
-    '1000.00',              // SubTotal
-    'MXN',                  // Moneda
-    '1000.00',              // Total
-    'P',                    // TipoDeComprobante (P = Pago)
-    '01',                   // Exportacion
-    'PUE',                  // MetodoPago
-    '03',                   // FormaPago
-    '06500'                 // LugarExpedicion
+$result = $factory->processCFDI(
+    cfdiData: $cfdi,
+    finkokUser: $finkokUser,
+    finkokPassword: $finkokPass,
+    filePath: './output/',
+    fileName: 'FACTURA_001'
 );
 
-// Agregar emisor y receptor
-$recepcion->AgregarEmisor('XAXX010101000', 'EMPRESA DEMO', '601');
-$recepcion->AgregarReceptor('XEXX010101000', 'CLIENTE DEMO', '601', 'G01', '06500');
-
-// Agregar concepto
-$recepcion->AgregarConcepto(
-    '84111506',             // ClaveProdServ
-    'PAG001',               // NoIdentificacion
-    '1',                    // Cantidad
-    'ACT',                  // ClaveUnidad
-    'Servicio',             // Unidad
-    'Pago de factura',      // Descripcion
-    '1000.00',              // ValorUnitario
-    '1000.00',              // Importe
-    '01'                    // ObjetoImp
-);
-
-// Configurar Recepción de Pagos
-$recepcion->RecepcionPagos(
-    '2.0',                  // Version
-    '2024-01-15T10:30:00', // FechaPago
-    'MXN',                  // FormaDePagoP
-    '1000.00'              // Monto
-);
-
-// Agregar documento relacionado
-$recepcion->AgregarDoctoRelacionado(
-    'uuid-del-documento',   // IdDocumento
-    'MXN',                  // MonedaDR
-    '1.000000',             // EquivalenciaDR
-    '01',                   // NumParcialidad
-    '1000.00',              // ImpSaldoAnt
-    '1000.00',              // ImpPagado
-    '1000.00',              // ImpSaldoInsoluto
-    '01'                    // ObjetoImpDR
-);
-
-// Finalizar recepción de pagos
-$recepcion->FinalizarRecepcionPagos();
-
-// Generar XML
-$errores = "";
-$resultado = $recepcion->CrearRecepcionPagosXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,
-    "./",
-    "RECEPCION_PAGOS_EJEMPLO"
-);
-
-if ($resultado === true) {
-    echo "✅ Recepción de Pagos generada exitosamente";
+if ($result->isSuccess()) {
+    echo "✅ CFDI generado exitosamente\n";
+    echo "📄 Archivo: " . $result->getFilePath() . "\n";
 } else {
-    echo "❌ Error: " . $errores;
+    echo "❌ Error: " . implode(', ', $result->getErrors()) . "\n";
 }
 ```
 
-### 3. CartaPorte31.php - Carta Porte 3.1
+### 💰 2. Complemento de Pagos 2.0
 
-#### Uso Básico
+#### Uso del Builder de Pagos
 ```php
-<?php
-require_once 'src/CartaPorte31.php';
-
-$cartaPorte = new CartaPorte31();
-
-// Configurar CFDI principal
-$cartaPorte->CFDI40(
-    '30001000000500003416',  // NoCertificado
-    'CCP',                   // Serie
-    '001',                   // Folio
-    '2024-01-15T10:30:00',  // Fecha
-    '1000.00',              // SubTotal
-    'MXN',                  // Moneda
-    '1160.00',              // Total
-    'T',                    // TipoDeComprobante (T = Traslado)
-    '01',                   // Exportacion
-    'PUE',                  // MetodoPago
-    '01',                   // FormaPago
-    '06500'                 // LugarExpedicion
-);
-
-// Agregar emisor y receptor
-$cartaPorte->AgregarEmisor('XAXX010101000', 'EMPRESA DEMO', '601');
-$cartaPorte->AgregarReceptor('XEXX010101000', 'CLIENTE DEMO', '601', 'G01', '06500');
-
-// Agregar concepto
-$cartaPorte->AgregarConcepto(
-    '78101800',             // ClaveProdServ
-    'CCP001',               // NoIdentificacion
-    '1',                    // Cantidad
-    'H87',                  // ClaveUnidad
-    'Pieza',                // Unidad
-    'Transporte de carga',  // Descripcion
-    '1000.00',              // ValorUnitario
-    '1000.00',              // Importe
-    '02'                    // ObjetoImp
-);
-
-// Agregar impuestos
-$cartaPorte->AgregarImpuestosTotales('0.00', '160.00');
-$cartaPorte->AgregarTrasladoTotal('1000.00', '160.00', '002', '0.160000', 'Tasa');
-
-// Configurar Carta Porte
-$cartaPorte->CartaPorte31(
-    'No',                   // TranspInternac
-    'Salida',               // EntradaSalidaMerc
-    '01',                   // ViaEntradaSalida
-    '1',                    // TotalDistRec
-    'No',                   // RegistroISTMO
-    '01',                   // UbicacionPoloOrigen
-    '01',                   // UbicacionPoloDestino
-    null,                   // IdCCP
-    'MEX'                   // PaisOrigenDestino
-);
-
-// Agregar ubicaciones
-$cartaPorte->AgregarUbicacion(
-    'Origen',               // TipoUbicacion
-    '2024-01-15T08:00:00', // FechaHoraProgLlegada
-    'MEX',                  // ClaveEntFed
-    '01',                   // IdUbicacion
-    'Origen',               // TipoEstacion
-    '01',                   // NumEstacion
-    'Nombre de la estación' // NombreEstacion
-);
-
-$cartaPorte->AgregarUbicacion(
-    'Destino',              // TipoUbicacion
-    '2024-01-15T18:00:00', // FechaHoraProgLlegada
-    'MEX',                  // ClaveEntFed
-    '02',                   // IdUbicacion
-    '01',                   // TipoEstacion
-    '02',                   // NumEstacion
-    'Estación destino'      // NombreEstacion
-);
-
-// Agregar mercancías
-$cartaPorte->AgregarMercancia(
-    '001',                  // ClaveUnidadPeso
-    '100.00',              // PesoBruto
-    'MEX',                  // PaisOrigenDestino
-    '01',                   // ClaveUnidadPeso
-    '100.00',              // PesoNeto
-    'Mercancía general'    // Descripcion
-);
-
-// Finalizar carta porte
-$cartaPorte->FinalizarCartaPorte();
-
-// Generar XML
-$errores = "";
-$resultado = $cartaPorte->CrearCartaPorteXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,
-    "./",
-    "CARTA_PORTE_EJEMPLO"
-);
-
-if ($resultado === true) {
-    echo "✅ Carta Porte generada exitosamente";
-} else {
-    echo "❌ Error: " . $errores;
-}
+$cfdi = $factory->createPagos()
+    ->comprobante(
+        noCertificado: '30001000000500003416',
+        serie: 'P',
+        folio: '001',
+        fecha: '2024-01-15T10:30:00',
+        subTotal: '0.00',
+        total: '0.00',
+        lugarExpedicion: '06500',
+        tipoDeComprobante: 'P'  // Importante: P = Pago
+    )
+    ->emisor(
+        rfc: 'XAXX010101000',
+        nombre: 'EMPRESA PAGOS SA DE CV',
+        regimenFiscal: '601'
+    )
+    ->receptor(
+        rfc: 'XEXX010101000',
+        nombre: 'CLIENTE PAGOS SA DE CV',
+        regimenFiscalReceptor: '605',
+        usoCFDI: 'CP01',
+        domicilioFiscalReceptor: '06500'
+    )
+    ->concepto(
+        claveProdServ: '84111506',
+        cantidad: '1.00',
+        claveUnidad: 'E48',
+        descripcion: 'Pago por servicios',
+        valorUnitario: '0.00',  // Puede ser 0.00 para tipo P
+        importe: '0.00',        // Puede ser 0.00 para tipo P
+        objetoImp: '01'
+    )
+    ->pago(
+        fechaPago: '2024-01-15',
+        formaDePagoP: '01',
+        monto: '1000.00',
+        monedaP: 'MXN',
+        tipoCambioP: '1.00'
+    )
+    ->doctoRelacionado(
+        idDocumento: 'uuid-del-documento',
+        monedaDR: 'MXN',
+        metodoDePagoDR: 'PPD',
+        numParcialidad: '1',
+        impSaldoAnt: '1000.00',
+        impPagado: '1000.00',
+        impSaldoInsoluto: '0.00'
+    )
+    ->trasladoDR(
+        base: '1000.00',
+        impuesto: '002',
+        tipoFactor: 'Tasa',
+        tasaOCuota: '0.160000',
+        importe: '160.00'
+    )
+    ->impuestosTotalesDR(
+        totalImpuestosRetenidos: '0.00',
+        totalImpuestosTrasladados: '160.00'
+    )
+    ->build();
 ```
 
-### 4. Nomina12.php - Nómina 1.2
+### 🚛 3. Complemento de Carta Porte 3.1
 
-#### Uso Básico
+#### Uso del Builder de Carta Porte
 ```php
-<?php
-require_once 'src/Nomina12.php';
+$cfdi = $factory->createCartaPorte()
+    ->comprobante(
+        noCertificado: '30001000000500003416',
+        serie: 'CP',
+        folio: '001',
+        fecha: '2024-01-15T10:30:00',
+        subTotal: '1000.00',
+        total: '1160.00',
+        lugarExpedicion: '06500'
+    )
+    ->emisor(
+        rfc: 'XAXX010101000',
+        nombre: 'EMPRESA TRANSPORTE SA DE CV',
+        regimenFiscal: '601'
+    )
+    ->receptor(
+        rfc: 'XEXX010101000',
+        nombre: 'CLIENTE TRANSPORTE SA DE CV',
+        regimenFiscalReceptor: '601',
+        usoCFDI: 'G01',
+        domicilioFiscalReceptor: '06500'
+    )
+    ->concepto(
+        claveProdServ: '78101800',
+        cantidad: '1.00',
+        claveUnidad: 'H87',
+        descripcion: 'Servicio de transporte de mercancía',
+        valorUnitario: '1000.00',
+        importe: '1000.00',
+        objetoImp: '02'
+    )
+    ->impuestosTotales()
+    ->trasladoTotal(
+        base: '1000.00',
+        impuesto: '002',
+        tipoFactor: 'Tasa',
+        tasaOCuota: '0.160000',
+        importe: '160.00'
+    )
+    ->transporteInternacional('No')
+    ->origen(
+        idUbicacion: 'ORIGEN001',
+        rfcRemitente: 'XAXX010101000',
+        fechaHora: '2024-01-15T08:00:00',
+        domicilio: [
+            'estado' => 'CDMX',
+            'pais' => 'MEX',
+            'codigoPostal' => '06000',
+            'calle' => 'Av. Principal',
+            'numeroExterior' => '123',
+            'colonia' => 'Centro',
+            'municipio' => 'Cuauhtémoc'
+        ]
+    )
+    ->destino(
+        idUbicacion: 'DESTINO001',
+        rfcDestinatario: 'XEXX010101000',
+        fechaHora: '2024-01-15T18:00:00',
+        domicilio: [
+            'estado' => 'CDMX',
+            'pais' => 'MEX',
+            'codigoPostal' => '07000',
+            'calle' => 'Calle Secundaria',
+            'numeroExterior' => '456',
+            'colonia' => 'Industrial',
+            'municipio' => 'Gustavo A. Madero'
+        ]
+    )
+    ->mercancia(
+        bienesTransp: '10101501',
+        descripcion: 'Productos manufacturados',
+        cantidad: '1.00',
+        claveUnidadPeso: 'KGM',
+        pesoEnKg: '50.00'
+    )
+    ->totalesMercancias(
+        pesoBrutoTotal: '50.00',
+        unidadPeso: 'KGM',
+        numTotalMercancias: '1'
+    )
+    ->operador('XEXX010101000', 'OPERADOR TRANSPORTE SA DE CV')
+    ->build();
+```
 
-$nomina = new Nomina12();
+### 👥 4. Complemento de Nómina 1.2
 
-// Configurar CFDI principal
-$nomina->CFDI40(
-    '30001000000500003416',  // NoCertificado
-    'NOM',                   // Serie
-    '001',                   // Folio
-    '2024-01-15T08:00:00',  // Fecha
-    '5000.00',              // SubTotal
-    'MXN',                  // Moneda
-    '5000.00',              // Total
-    'N',                    // TipoDeComprobante (N = Nómina)
-    '01',                   // Exportacion
-    'PUE',                  // MetodoPago
-    '03',                   // FormaPago
-    '42501'                 // LugarExpedicion
-);
+#### Uso del Builder de Nómina
+```php
+$cfdi = $factory->createNomina()
+    ->comprobante(
+        noCertificado: '30001000000500003416',
+        serie: 'N',
+        folio: '001',
+        fecha: '2024-01-15T08:00:00',
+        subTotal: '5000.00',
+        total: '5000.00',
+        lugarExpedicion: '06500'
+    )
+    ->emisor(
+        rfc: 'XAXX010101000',
+        nombre: 'EMPRESA RECURSOS HUMANOS SA DE CV',
+        regimenFiscal: '601'
+    )
+    ->receptor(
+        rfc: 'XEXX010101000',
+        nombre: 'EMPLEADO EJEMPLO',
+        regimenFiscalReceptor: '605',
+        usoCFDI: 'CN01',
+        domicilioFiscalReceptor: '06500'
+    )
+    ->concepto(
+        claveProdServ: '84111506',
+        cantidad: '1.00',
+        claveUnidad: 'E48',
+        descripcion: 'Pago de nómina',
+        valorUnitario: '5000.00',
+        importe: '5000.00',
+        objetoImp: '01'
+    )
+    ->tipoNomina('O')
+    ->fechasPago(
+        fechaPago: '2024-01-15',
+        fechaInicialPago: '2024-01-01',
+        fechaFinalPago: '2024-01-15',
+        numDiasPagados: '15'
+    )
+    ->emisorNomina([
+        'curp' => 'XEXX010101HDFXXXA8',
+        'registroPatronal' => 'O1234567890'
+    ])
+    ->receptorNomina([
+        'curp' => 'XEXX010101HDFXXXA8',
+        'numSeguridadSocial' => '12345678901',
+        'fechaInicioRelLaboral' => '2020-01-01',
+        'antiguedad' => 'P4Y',
+        'tipoContrato' => '01',
+        'sindicalizado' => 'No',
+        'tipoJornada' => '01',
+        'tipoRegimen' => '02',
+        'numEmpleado' => '001',
+        'departamento' => 'ADMINISTRATIVO',
+        'puesto' => 'AUXILIAR',
+        'riesgoPuesto' => '1',
+        'periodicidadPago' => '04',
+        'banco' => '012',
+        'cuentaBancaria' => '012345678901234567',
+        'salarioBaseCotApor' => '5000.00',
+        'salarioDiarioIntegrado' => '333.33'
+    ])
+    ->percepciones([
+        'totalSueldos' => '5000.00',
+        'totalSeparacionIndemnizacion' => '0.00',
+        'totalJubilacionPensionRetiro' => '0.00',
+        'totalGravado' => '5000.00',
+        'totalExento' => '0.00'
+    ])
+    ->deducciones([
+        'totalOtrasDeducciones' => '0.00',
+        'totalImpuestosRetenidos' => '0.00'
+    ])
+    ->build();
+```
 
-// Agregar emisor y receptor
-$nomina->AgregarEmisor('EKU9003173C9', 'EMPRESA EJEMPLO', '601');
-$nomina->AgregarReceptor('XAXX010101000', 'JUAN PEREZ', '616', 'CN01', '80290');
+## 🔍 Servicios Disponibles
 
-// Agregar concepto
-$nomina->AgregarConcepto(
-    '84111506',             // ClaveProdServ
-    'NOM001',               // NoIdentificacion
-    '1',                    // Cantidad
-    'ACT',                  // ClaveUnidad
-    'Servicio',             // Unidad
-    'Pago de nómina',       // Descripcion
-    '5000.00',              // ValorUnitario
-    '5000.00',              // Importe
-    '01'                    // ObjetoImp
-);
+### 1. Validación de Credenciales
+```php
+$credentialsResult = $factory->validateCredentials($finkokUser, $finkokPass);
 
-// Configurar nómina
-$nomina->Nomina12(
-    '1.2',                  // Version
-    'O',                    // TipoNomina (O = Ordinaria)
-    '2024-01-15T08:00:00', // FechaPago
-    '2024-01-01T00:00:00', // FechaInicialPago
-    '2024-01-15T23:59:59', // FechaFinalPago
-    '15'                    // NumDiasPagados
-);
-
-// Agregar receptor de nómina
-$nomina->AgregarReceptorNomina(
-    'PEGJ800101HDFXXX01',   // Curp
-    null,                    // NumSeguridadSocial
-    null,                    // FechaInicioRelLaboral
-    null,                    // Antigüedad
-    '01',                    // TipoContrato
-    null,                    // Sindicalizado
-    null,                    // TipoJornada
-    '02',                    // TipoRegimen
-    'EMP001',                // NumEmpleado
-    null,                    // Departamento
-    null,                    // Puesto
-    null,                    // RiesgoPuesto
-    '04',                    // PeriodicidadPago
-    null,                    // Banco
-    null,                    // CuentaBancaria
-    null,                    // SalarioBaseCotApor
-    null,                    // SalarioDiarioIntegrado
-    'MEX'                    // ClaveEntFed
-);
-
-// Agregar percepción
-$nomina->AgregarPercepcion(
-    '001',                   // TipoPercepcion
-    '001',                   // Clave
-    'Sueldo ordinario',      // Concepto
-    '5000.00',              // ImporteGravado
-    '0.00'                  // ImporteExento
-);
-
-// Finalizar nómina
-$nomina->FinalizarNomina(
-    '5000.00',              // TotalSueldos
-    null,                    // TotalSeparacionIndemnizacion
-    null,                    // TotalJubilacionPensionRetiro
-    '5000.00',              // TotalGravado
-    '0.00',                 // TotalExento
-    null,                    // TotalOtrasDeducciones
-    null                     // TotalImpuestosRetenidos
-);
-
-// Generar XML
-$errores = "";
-$resultado = $nomina->CrearNominaXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,
-    "./",
-    "NOMINA_EJEMPLO"
-);
-
-if ($resultado === true) {
-    echo "✅ Nómina generada exitosamente";
+if ($credentialsResult->isValid()) {
+    echo "✅ Credenciales válidas\n";
 } else {
-    echo "❌ Error: " . $errores;
+    echo "❌ Credenciales inválidas: " . implode(', ', $credentialsResult->getErrors()) . "\n";
 }
 ```
+
+### 2. Validación de RFC
+```php
+$rfcResult = $factory->validateRFC($finkokUser, $finkokPass, 'XAXX010101000');
+
+if ($rfcResult->isValid()) {
+    echo "✅ RFC válido y activo\n";
+} else {
+    echo "❌ RFC inválido: " . implode(', ', $rfcResult->getErrors()) . "\n";
+}
+```
+
+### 3. Generación de XML Solo
+```php
+$xml = $factory->generateXML($cfdiData);
+echo "XML generado: " . $xml;
+```
+
+### 4. Guardado de Archivo Solo
+```php
+$path = $factory->saveXML($xml, './output/', 'mi_cfdi');
+echo "Archivo guardado en: " . $path;
+```
+
+## 📊 Tipos de Comprobante
+
+| Tipo | Descripción | Uso |
+|------|-------------|-----|
+| `I` | Ingreso | Facturas de venta |
+| `E` | Egreso | Notas de crédito |
+| `T` | Traslado | Transporte de mercancías |
+| `N` | Nómina | Pagos de nómina |
+| `P` | Pago | Recibos de pago |
+
+## 🔧 Configuración Avanzada
+
+### Múltiples Conceptos
+```php
+$cfdi = $factory->createCFDI40Builder()
+    ->comprobante(/* ... */)
+    ->emisor(/* ... */)
+    ->receptor(/* ... */)
+    // Primer concepto
+    ->concepto(
+        claveProdServ: '84111506',
+        cantidad: '2.00',
+        claveUnidad: 'H87',
+        descripcion: 'Consultoría Básica',
+        valorUnitario: '500.00',
+        importe: '1000.00',
+        objetoImp: '02'
+    )
+    ->traslado('1000.00', '002', 'Tasa', '0.160000', '160.00')
+    // Segundo concepto
+    ->concepto(
+        claveProdServ: '84111507',
+        cantidad: '1.00',
+        claveUnidad: 'H87',
+        descripcion: 'Consultoría Especializada',
+        valorUnitario: '1500.00',
+        importe: '1500.00',
+        objetoImp: '02'
+    )
+    ->traslado('1500.00', '002', 'Tasa', '0.160000', '240.00')
+    // Impuestos totales
+    ->impuestosTotales(null, '400.00')
+    ->trasladoTotal('2500.00', '002', 'Tasa', '0.160000', '400.00')
+    ->build();
+```
+
+### Impuestos por Concepto
+```php
+$cfdi = $factory->createCFDI40Builder()
+    ->comprobante(/* ... */)
+    ->emisor(/* ... */)
+    ->receptor(/* ... */)
+    ->concepto(/* ... */)
+    ->traslado('1000.00', '002', 'Tasa', '0.160000', '160.00')  // IVA
+    ->retencion('1000.00', '001', 'Tasa', '0.100000', '100.00') // ISR
+    ->build();
+```
+
+## 📁 Ejemplos de Uso
+
+### Ejecutar Ejemplos
+```bash
+# CFDI básico
+php examples/ejemplo_cfdi_basico.php
+
+# Complemento de Pagos
+php examples/ejemplo_pagos.php
+
+# Complemento de Carta Porte
+php examples/ejemplo_cartaporte.php
+
+# Complemento de Nómina
+php examples/ejemplo_nomina.php
+```
+
+### Archivos Generados
+Todos los ejemplos generan archivos XML en la carpeta `examples/output/`:
+- `CFDI_BASICO.xml`
+- `CFDI_PAGOS.xml`
+- `CFDI_CARTA_PORTE.xml`
+- `CFDI_NOMINA.xml`
 
 ## 🔍 Validaciones y Errores
 
-### Validaciones de Finkok
-Todas las clases incluyen validaciones automáticas:
-
-1. **Credenciales**: Verificación de usuario y contraseña
+### Validaciones Automáticas
+1. **Credenciales Finkok**: Verificación de usuario y contraseña
 2. **RFC Emisor**: Estado activo en la cuenta
-3. **Servicios**: Disponibilidad de servicios SOAP
+3. **Datos CFDI**: Validación de campos requeridos
+4. **Complementos**: Validación específica por tipo
 
 ### Manejo de Errores
 ```php
-$errores = "";
-$errorE = null;
+$result = $factory->processCFDI(/* ... */);
 
-$resultado = $clase->CrearXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,        // Variable para mensajes de error
-    "./",            // Ruta de guardado
-    "ARCHIVO",       // Nombre del archivo
-    $errorE          // Variable para excepciones
-);
-
-if ($resultado === true) {
-    echo "✅ XML generado exitosamente";
-} else {
-    echo "❌ Error: " . $errores;
+if (!$result->isSuccess()) {
+    echo "❌ Error: " . $result->getMessage() . "\n";
     
-    if ($errorE !== null) {
-        echo "Error adicional: " . $errorE->getMessage();
+    if ($result->getErrors()) {
+        echo "🔍 Errores detallados:\n";
+        foreach ($result->getErrors() as $error) {
+            echo "  - $error\n";
+        }
     }
 }
 ```
@@ -526,180 +583,48 @@ if ($resultado === true) {
 
 #### Error de Credenciales
 ```
-Error: Error de autenticación: Credenciales inválidas
+❌ Error: Credenciales inválidas
 ```
 **Solución**: Verificar credenciales de Finkok.
 
 #### RFC Inactivo
 ```
-Error: El RFC emisor se encuentra inactivo en la cuenta
+❌ Error: El RFC emisor se encuentra inactivo en la cuenta
 ```
 **Solución**: Activar RFC en cuenta de Finkok.
 
-#### Error de Conexión
+#### Error de Validación
 ```
-Error: Error en el servicio de autenticación: Connection timed out
+❌ Error: El importe debe ser mayor a cero en el concepto 1
 ```
-**Solución**: Verificar conectividad a internet y servicios de Finkok.
+**Solución**: Para tipo de comprobante 'P' (Pago), el importe puede ser 0.00.
 
-## 📁 Archivos Generados
 
-### Estructura de Nombres
-- **CFDI40**: `FACTURA_EJEMPLO.xml`
-- **Recepción de Pagos**: `RECEPCION_PAGOS_EJEMPLO.xml`
-- **Carta Porte**: `CARTA_PORTE_EJEMPLO.xml`
-- **Nómina**: `NOMINA_EJEMPLO.xml`
-
-### Ubicación de Archivos
-Los archivos se guardan en la ruta especificada en el parámetro `$Ruta` del método de creación.
-
-## 🛠️ Configuración Avanzada
-
-### Personalización de Rutas
-```php
-// Ruta personalizada
-$rutaPersonalizada = "/var/www/html/cfdi/";
-$nombreArchivo = "FACTURA_" . date('Y-m-d_H-i-s');
-
-$resultado = $clase->CrearXML(
-    $finkokUser,
-    $finkokPass,
-    $errores,
-    $rutaPersonalizada,
-    $nombreArchivo
-);
-```
-
-### Validación de Esquemas
-```php
-// Validar XML contra esquema XSD
-$xml = new DOMDocument();
-$xml->load('archivo.xml');
-
-if ($xml->schemaValidate('esquema.xsd')) {
-    echo "✅ XML válido según esquema";
-} else {
-    echo "❌ XML no válido según esquema";
-}
-```
-
-### Logging de Errores
-```php
-// Configurar logging
-ini_set('log_errors', 1);
-ini_set('error_log', 'cfdi_errors.log');
-
-// Los errores se registrarán en el archivo especificado
-```
-
-## 📊 Ejemplos de Uso por Escenario
-
-### Escenario 1: Facturación Básica
-```php
-// Usar CFDI40.php para facturas simples
-require_once 'src/CFDI40.php';
-$cfdi = new CFDI40();
-// ... configuración básica
-```
-
-### Escenario 2: Facturación con Transporte
-```php
-// Usar CartaPorte31.php para envíos
-require_once 'src/CartaPorte31.php';
-$cartaPorte = new CartaPorte31();
-// ... configuración con ubicaciones
-```
-
-### Escenario 3: Nómina Completa
-```php
-// Usar Nomina12.php para recursos humanos
-require_once 'src/Nomina12.php';
-$nomina = new Nomina12();
-// ... configuración con percepciones y deducciones
-```
-
-### Escenario 4: Recepción de Pagos
-```php
-// Usar RecepcionPagos.php para abonos
-require_once 'src/RecepcionPagos.php';
-$recepcion = new RecepcionPagos();
-// ... configuración con documentos relacionados
-```
-
-## 🔧 Troubleshooting
-
-### Problemas de Conexión SOAP
-```php
-// Verificar extensiones PHP
-if (!extension_loaded('soap')) {
-    die('Extensión SOAP no está habilitada');
-}
-
-// Verificar conectividad
-$url = "https://demo-facturacion.finkok.com/servicios/soap/utilities.wsdl";
-$context = stream_context_create(['http' => ['timeout' => 10]]);
-$result = @file_get_contents($url, false, $context);
-
-if ($result === false) {
-    die('No se puede conectar a Finkok');
-}
-```
-
-### Problemas de Memoria
-```php
-// Aumentar límite de memoria para archivos grandes
-ini_set('memory_limit', '512M');
-
-// Limpiar memoria después de generar XML
-unset($xml);
-gc_collect_cycles();
-```
-
-### Problemas de Permisos
-```bash
-# Verificar permisos de escritura
-chmod 755 /ruta/destino
-chown www-data:www-data /ruta/destino
-```
-
-## 📚 Recursos Adicionales
-
-### Documentación del SAT
-- [CFDI 4.0](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm)
-- [Recepción de Pagos](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/recepcion_de_pagos.htm)
-- [Carta Porte](http://omawww.sat.gob.mx/tramitesyservicios/paginas/complemento_carta_porte.htm)
-- [Nómina](https://www.sat.gob.mx/cfd/nomina)
-
-### Catálogos del SAT
-- [Catálogo de Productos y Servicios](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
-- [Catálogo de Unidades](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
-- [Catálogo de Impuestos](http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20250808.xls)
-
-### Servicios de Finkok
-- [Documentación API](https://www.finkok.com/developers/) Estan los .md como documentacion
-
-## 🤝 Contribuciones
-
-Para contribuir al proyecto:
-
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
 ## 📞 Soporte
 
-Para soporte técnico:
+### Recursos de Ayuda
 
-- **Issues**: Crear un issue en GitHub
 - **Email**: alfredo.mejia@finkok.com
-- **Documentación**: Esta documentación y archivos README específicos
+- **Documentación**: Este README y ejemplos en `/examples/`
 
----
+### Recursos Externos
+- **SAT**: [www.sat.gob.mx](https://www.sat.gob.mx)
+- **Finkok**: [www.finkok.com](https://www.finkok.com)
+- **GitHub**: Repositorio del proyecto
 
-**Nota**: Esta documentación se actualiza regularmente. Para la versión más reciente, consulta el repositorio de GitHub.
+## 🔄 Historial de Versiones
+
+- **v1.0.0**: CFDI 4.0 básico
+- **v1.1.0**: Recepción de Pagos
+- **v1.2.0**: Carta Porte 3.1
+- **v1.3.0**: Nómina 1.2
+- **v1.4.0**: Nueva arquitectura escalable
+- **v2.0.0**: Arquitectura moderna con patrones de diseño
+
+## 📝 Notas Importantes
+
+1. **Credenciales**: Siempre usa credenciales válidas de Finkok
+2. **Validación**: Todas las clases incluyen validaciones automáticas
+3. **XML**: Los archivos se generan conforme a esquemas del SAT
+
